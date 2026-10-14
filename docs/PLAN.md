@@ -236,7 +236,7 @@ Data and security come before the booking flow on purpose: RLS is easiest to get
 | Phase | Name | Scope | Gate to pass before the next phase |
 | --- | --- | --- | --- |
 | 0 | Foundation and agent setup | AGENTS.md, .mcp.json, skills, CI, local Supabase | Agent can run dev server, lint, typecheck, tests |
-| 1 | Design system and static pages | Tokens, components, home and service pages | Mobile Lighthouse 90+ on home |
+| 1 | Design system and static pages | Tokens, components, home and service pages | Mobile Lighthouse 90+ on home — passed 2026-10-14, score 92 |
 | 2 | Data and security | Schema, enums, RLS policies, seed data | Advisors clean and RLS tests pass |
 | 3 | Booking flow | Form, Server Action, Resend emails, spam checks | E2E passes and the owner email arrives |
 | 4 | Admin dashboard | Auth with MFA, inbox, lead detail, settings, CSV | Lead moves new to scheduled; non-admin blocked |

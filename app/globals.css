@@ -1,26 +1,59 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Apex design tokens, taken from the Figma handoff (docs/design/mcp/site.md).
+   Components read colors, fonts and radii from here — never raw values. */
+@theme {
+  --color-ink: #16241e;
+  --color-mute: #5c675f;
+  --color-soft: #3e4a44;
+  --color-cedar: #1c4a3c;
+  --color-deep: #102e26;
+  --color-live: #2f8f5b;
+  --color-copper: #c4622d;
+  --color-sand: #f4efe7;
+  --color-paper: #fbf8f3;
+  --color-line: #e4daca;
+  --color-sage: #e3eee8;
+  --color-heat: #a32d1e;
+  --color-gold: #a67c2d;
+  --color-peach: #f6d3be;
+  --color-mint: #d5e3dc;
+  --color-mist: #8fb3a4;
+  --color-dust: #c9c2b6;
+  --color-chalk: #e7e1d6;
+  --color-graphite: #2c3b34;
+  --color-sample: #f3e2d4;
+
+  --radius-card: 18px;
+  --radius-panel: 20px;
+  --radius-photo: 22px;
+  --radius-chip: 14px;
+  --radius-field: 12px;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    font-family: var(--font-sans);
   }
-}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  body {
+    background-color: var(--color-sand);
+    color: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-copper);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: var(--color-sage);
+    color: var(--color-ink);
+  }
 }
