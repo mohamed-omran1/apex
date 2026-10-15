@@ -1,5 +1,6 @@
--- Phase 2 RLS tests.
--- Proves AC-2, AC-3 and AC-4 from docs/specs/phase-2.md.
+-- Phase 2 RLS tests, Phase 4 update.
+-- Proves the security matrix from docs/specs/phase-2.md, with the admin
+-- check now reading the JWT app_metadata role claim (phase-4 AC-9).
 -- Fixtures run as postgres (RLS bypass) with ON CONFLICT DO NOTHING so the
 -- file runs cleanly whether or not seed data is already present. Assertions
 -- filter on fixture-specific UUIDs, never on global table counts. The whole
@@ -55,7 +56,7 @@ on conflict (reference_code) do nothing;
 -- Plan: 16 assertions total
 -- ---------------------------------------------------------------------------
 
-select plan(16);
+select plan(17);
 
 -- ===========================================================================
 -- AC-2: anon reads (scoped to fixture rows by UUID so seed data cannot skew)
@@ -171,6 +172,8 @@ reset role;
 
 -- ===========================================================================
 -- AC-4: non-admin authenticated denial
+-- A real auth user with the admin_users row but WITHOUT the claim still
+-- sees nothing. The table alone no longer authorizes.
 -- ===========================================================================
 
 select set_config('request.jwt.claims', '{"sub": "aaaaaaaa-0000-0000-0000-000000000002", "role": "authenticated"}', true);
@@ -185,11 +188,25 @@ select is(
 
 reset role;
 
+-- Authenticated user WITH the admin_users row but WITHOUT the claim:
+-- still zero. The migration made the claim the only source.
+select set_config('request.jwt.claims', '{"sub": "aaaaaaaa-0000-0000-0000-000000000001", "role": "authenticated"}', true);
+set local role authenticated;
+
+select is(
+  (select count(*)::int from public.leads),
+  0,
+  'admin row without claim sees zero leads (claim is the source now)'
+);
+
+reset role;
+
 -- ===========================================================================
 -- AC-4: admin access
+-- The claim is what authorizes now; the admin_users row is only a log.
 -- ===========================================================================
 
-select set_config('request.jwt.claims', '{"sub": "aaaaaaaa-0000-0000-0000-000000000001", "role": "authenticated"}', true);
+select set_config('request.jwt.claims', '{"sub": "aaaaaaaa-0000-0000-0000-000000000001", "role": "authenticated", "app_metadata": {"role": "admin"}}', true);
 set local role authenticated;
 
 select is(
