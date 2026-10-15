@@ -96,6 +96,15 @@ export const leadFormSchema = z.discriminatedUnion("kind", [
 
 export type LeadFormInput = z.infer<typeof leadFormSchema>;
 
+/** Result contract shared by the server action and the form component. */
+export type LeadFormState = {
+  ok: boolean;
+  code: "submitted" | "duplicate" | "rate_limited" | "invalid" | "server_error";
+  referenceCode?: string;
+  fieldErrors?: Record<string, string>;
+  message?: string;
+} | null;
+
 export function parseLeadForm(formData: FormData): unknown {
   const get = (key: string) => {
     const value = formData.get(key);
