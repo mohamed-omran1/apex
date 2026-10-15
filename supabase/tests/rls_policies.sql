@@ -52,10 +52,10 @@ insert into public.leads (id, kind, status, name, phone, zip, reference_code) va
 on conflict (reference_code) do nothing;
 
 -- ---------------------------------------------------------------------------
--- Plan: 14 assertions total
+-- Plan: 16 assertions total
 -- ---------------------------------------------------------------------------
 
-select plan(14);
+select plan(16);
 
 -- ===========================================================================
 -- AC-2: anon reads (scoped to fixture rows by UUID so seed data cannot skew)
@@ -125,12 +125,6 @@ select is(
 insert into public.leads (kind, name, phone, zip)
 values ('repair', 'RLS Anon Visitor', '(214) 555-0100', '75201');
 
-select is(
-  (select status::text from public.leads where phone = '(214) 555-0100'),
-  'new',
-  'anon insert defaults status to new'
-);
-
 select throws_ok(
   $$
     insert into public.leads (kind, status, name, phone, zip)
@@ -148,6 +142,14 @@ select is(
 );
 
 reset role;
+
+-- Verify the anon insert landed with status = new (as postgres, since anon
+-- has no select on leads by design).
+select is(
+  (select status::text from public.leads where phone = '(214) 555-0100'),
+  'new',
+  'anon insert defaults status to new'
+);
 
 -- ===========================================================================
 -- AC-2 continued: anon has no update anywhere
