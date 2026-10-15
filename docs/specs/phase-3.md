@@ -151,7 +151,7 @@ Order of operations, each step short circuits with the state above:
 6. [x] `actions/submitLead.ts` implementing the nine steps, satisfies **AC-3**, **AC-4**, **AC-5**, **AC-6**, **AC-7**
 7. [x] Book page server component + client form to the frame, satisfies **AC-1**
 8. [x] Playwright `@ci` suite, `@local` full submit spec, CI job with public env only, satisfies **AC-8**
-9. Gate: lint, typecheck, unit, build, local full submit (human confirms owner email), advisors, tick ACs, report, satisfies **AC-8**, **AC-9**
+9. [x] Gate: lint, typecheck, unit, build, local full submit (human confirms owner email), advisors, tick ACs, report, satisfies **AC-8**, **AC-9**
 
 ## Consequences
 
