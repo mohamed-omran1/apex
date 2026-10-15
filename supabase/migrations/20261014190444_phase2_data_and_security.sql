@@ -28,7 +28,7 @@ create type public.lead_kind as enum (
 -- =============================================================================
 
 create table public.admin_users (
-  user_id uuid primary key references auth.users (user_id) on delete cascade,
+  user_id uuid primary key references auth.users (id) on delete cascade,
   role text not null default 'admin',
   created_at timestamptz not null default now()
 );

@@ -113,7 +113,7 @@ insert into public.lead_events (id, lead_id, event_type, actor_user_id, body, me
   ('00000000-0000-0000-0000-000000002005', '00000000-0000-0000-0000-000000001002', 'status_changed', null, 'Lead marked as contacted', null, '2026-10-13 15:05:00+00'),
   ('00000000-0000-0000-0000-000000002006', '00000000-0000-0000-0000-000000001007', 'email_sent',    null, 'Initial contact email sent', null, '2026-10-13 09:45:00+00'),
   ('00000000-0000-0000-0000-000000002007', '00000000-0000-0000-0000-000000001007', 'status_changed', null, 'Lead marked as contacted', null, '2026-10-13 09:50:00+00'),
-  ('00000000-0000-0000-0000-000000002008', '00000000-0000-0000-0000-000000001005', 'status_changed', null, 'Lead marked as lost', 'Customer went with another company', '2026-10-07 16:00:00+00'),
+  ('00000000-0000-0000-0000-000000002008', '00000000-0000-0000-0000-000000001005', 'status_changed', null, 'Lead marked as lost', null, '2026-10-07 16:00:00+00'),
   ('00000000-0000-0000-0000-000000002009', '00000000-0000-0000-0000-000000001016', 'status_changed', null, 'Lead marked as spam', null, '2026-10-06 04:00:00+00'),
   ('00000000-0000-0000-0000-000000002010', '00000000-0000-0000-0000-000000001012', 'email_sent',    null, 'Emergency callback confirmation', null, '2026-10-13 22:30:00+00'),
   ('00000000-0000-0000-0000-000000002011', '00000000-0000-0000-0000-000000001012', 'status_changed', null, 'Lead marked as contacted', null, '2026-10-13 22:35:00+00')
