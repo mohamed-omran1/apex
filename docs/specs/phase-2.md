@@ -158,13 +158,13 @@ Test mechanics: every test file runs inside a transaction it rolls back. Fixture
 
 ## Build plan
 
-1. Create the migration with `npx supabase migration new phase2_data_and_security`, then write enums, eight tables, indexes, `ENABLE ROW LEVEL SECURITY` and all policies in that one file (RLS in the same migration as the table, per AGENTS.md), satisfies **AC-1**, **AC-2**, **AC-3**, **AC-4**
+1. [x] Create the migration with `npx supabase migration new phase2_data_and_security`, then write enums, eight tables, indexes, `ENABLE ROW LEVEL SECURITY` and all policies in that one file (RLS in the same migration as the table, per AGENTS.md), satisfies **AC-1**, **AC-2**, **AC-3**, **AC-4**
 2. Report the exact human commands (`npx supabase db push --linked --dry-run`, then `npx supabase db push --linked`) and wait for confirmation that the push succeeded, satisfies **AC-1**
 3. Run advisors (`npx supabase db advisors`, cross checked with the MCP `get_advisors` tool) and fix any finding, satisfies **AC-6**
 4. Verify Data API exposure: anon `GET /rest/v1/services` returns rows while `git grep -i service_role` stays empty, satisfies **AC-9**
 5. Generate and commit types: `npx supabase gen types typescript --linked` into `lib/supabase/`, then run lint, typecheck and tests, satisfies **AC-8**
-6. Write `supabase/seed.sql` (fixed slugs and ids; the six services and six areas named in PLAN.md; an offer with fixed demo dates 2026-01-01 to 2026-12-31; `ON CONFLICT DO UPDATE` on marketing rows but `DO NOTHING` on `site_settings` so demo admin edits survive; 15 to 20 sample leads with events), report the human's apply command (`npx supabase db query --linked --file supabase/seed.sql`), satisfies **AC-7**
-7. Write pgTAP tests in `supabase/tests/` for the critical scenarios above, setup per the test mechanics note (rolled back transactions, owner fixtures first, then simulated JWT claims); run `npx supabase test db --linked` until green, installing pgTAP first with `npx supabase db query --linked "create extension if not exists pgtap"` if the project lacks it, satisfies **AC-5**, **AC-2**, **AC-3**, **AC-4**
+6. [x] Write `supabase/seed.sql` (fixed slugs and ids; the six services and six areas named in PLAN.md; an offer with fixed demo dates 2026-01-01 to 2026-12-31; `ON CONFLICT DO UPDATE` on marketing rows but `DO NOTHING` on `site_settings` so demo admin edits survive; 15 to 20 sample leads with events), report the human's apply command (`npx supabase db query --linked --file supabase/seed.sql`), satisfies **AC-7**
+7. [x] Write pgTAP tests in `supabase/tests/` for the critical scenarios above, setup per the test mechanics note (rolled back transactions, owner fixtures first, then simulated JWT claims); run `npx supabase test db --linked` until green, installing pgTAP first with `npx supabase db query --linked "create extension if not exists pgtap"` if the project lacks it, satisfies **AC-5**, **AC-2**, **AC-3**, **AC-4**
 8. Run the full gate (`npm run lint`, `npm run typecheck`, `npm run test`) and report at the phase gate: what passed, what did not, what the human must do next, satisfies **AC-8**
 
 ## Consequences
