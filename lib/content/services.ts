@@ -53,7 +53,7 @@ export const services: Service[] = [
     h1: "The line is open. The form is four fields.",
     lede: "If the house is climbing and the system is dead, call (214) 555-0148. If you would rather not talk yet, the emergency form asks for your name, phone, ZIP, and what is wrong — so we still have a number if you stop halfway.",
     primary: call,
-    secondary: { label: "Send the short form", href: "/book" },
+    secondary: { label: "Send the short form", href: "/book?type=emergency" },
     cards: [
       {
         title: "Call us now",
@@ -100,7 +100,7 @@ export const services: Service[] = [
     h1: "AC repair, with the number before the work.",
     lede: "Not cooling, short cycling, or warm air from the vents. Most repair visits in Dallas–Fort Worth land between $180 and $650. The $89 diagnostic is waived if you approve the repair.",
     primary: call,
-    secondary: { label: "Book a repair", href: "/book" },
+    secondary: { label: "Book a repair", href: "/book?type=repair" },
     heroImage: {
       src: "/images/hero-ac-repair.png",
       alt: "Outdoor AC condenser with refrigerant lines against a brick wall",
@@ -154,7 +154,7 @@ export const services: Service[] = [
     },
     h1: "A new system, priced in the house.",
     lede: "Replacement is a planned job, not a midnight one. The estimate visit is free. Most full systems we write up in Dallas–Fort Worth land between $7,500 and $14,500 before any rebate. That is a range, not your quote.",
-    primary: { label: "Book a free estimate", href: "/book" },
+    primary: { label: "Book a free estimate", href: "/book?type=estimate" },
     secondary: call,
     cards: [
       {
@@ -246,7 +246,7 @@ export const services: Service[] = [
     },
     h1: "Two seasons. One checkup each.",
     lede: "Spring is the AC. Fall is the furnace. Book the fall checkup before the first cold week, not during it. Through October 31 the furnace visit is $89, with a written price if we find something to fix.",
-    primary: book,
+    primary: { label: "Book a visit", href: "/book?type=tune_up" },
     secondary: call,
     cards: [
       {

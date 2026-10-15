@@ -9,7 +9,7 @@ import {
   generateReferenceCode,
   normalizePhone,
 } from "@/lib/lead/rate-limit";
-import { createClient, createServiceClient } from "@/lib/supabase/server";
+import { createPublicClient, createServiceClient } from "@/lib/supabase/server";
 import type { Json } from "@/lib/supabase/database.types";
 import {
   fieldErrorsFrom,
@@ -75,7 +75,7 @@ export async function submitLead(
     "unknown";
 
   // 2. Turnstile, only when the secret key exists.
-  const turnstileToken = String(formData.get("turnstile_token") ?? "");
+  const turnstileToken = String(formData.get("cf-turnstile-response") ?? "");
   if (!(await verifyTurnstile(turnstileToken, ip))) {
     return {
       ok: false,
@@ -93,7 +93,7 @@ export async function submitLead(
       code: "rate_limited",
       message:
         rate.scope === "phone"
-          ? "Three requests from this number in ten minutes. Please call instead."
+          ? "That is three requests in ten minutes. Please call instead."
           : "Too many requests from this connection. Please call instead.",
     };
   }
@@ -110,7 +110,7 @@ export async function submitLead(
   }
   const input = parsed.data;
 
-  const supabase = await createClient();
+  const supabase = createPublicClient();
 
   // 5. Zip re-check on the server. Never blocks; the zip is stored as typed.
   const { data: areas } = await supabase
@@ -153,8 +153,7 @@ export async function submitLead(
         ok: true,
         code: "duplicate",
         referenceCode: duplicate.reference_code,
-        message:
-          "We already have your request from the last ten minutes. Your reference stays the same, no need to send it twice.",
+        message: `We already have your request from the last ten minutes. Your reference stays ${duplicate.reference_code} — no need to send it twice.`,
       };
     }
   }

@@ -1,5 +1,4 @@
 import { createServerClient } from "@supabase/ssr";
-import { cookies } from "next/headers";
 import type { Database } from "@/lib/supabase/database.types";
 
 function requireEnv(name: string): string {
@@ -12,27 +11,21 @@ function requireEnv(name: string): string {
 
 /**
  * Anon (publishable key) client for Server Components and Server Actions.
- * RLS is the protection; this client never holds a user session beyond
- * whatever cookies the request already carries.
+ * Deliberately cookie free: the public routes are static under
+ * `ensureStatic = "navigation"`, so cached code may not touch next/headers.
+ * RLS is the protection; no user session is involved on the lead path.
  */
-export async function createClient() {
+export function createPublicClient() {
   const url = requireEnv("NEXT_PUBLIC_SUPABASE_URL");
   const publishableKey = requireEnv("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY");
-  const cookieStore = await cookies();
 
   return createServerClient<Database>(url, publishableKey, {
     cookies: {
       getAll() {
-        return cookieStore.getAll();
+        return [];
       },
-      setAll(cookiesToSet) {
-        try {
-          cookiesToSet.forEach(({ name, value, options }) =>
-            cookieStore.set(name, value, options),
-          );
-        } catch {
-          // Called from a Server Component where cookies cannot be set.
-        }
+      setAll() {
+        // No session on the public read and lead insert path.
       },
     },
   });

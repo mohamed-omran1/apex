@@ -252,7 +252,7 @@ export default function HomePage() {
                 {home.membership.body}
               </p>
             </div>
-            <ButtonLink href="/book" variant="primary">
+            <ButtonLink href="/book?type=membership" variant="primary">
               {home.membership.cta}
             </ButtonLink>
           </div>
