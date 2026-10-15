@@ -1,4 +1,5 @@
 import { createServerClient } from "@supabase/ssr";
+import { cookies } from "next/headers";
 import type { Database } from "@/lib/supabase/database.types";
 
 function requireEnv(name: string): string {
@@ -51,4 +52,44 @@ export function createServiceClient() {
       },
     },
   });
+}
+
+/**
+ * Session aware client for admin Server Components, Server Actions and
+ * route handlers. Reads and writes the @supabase/ssr auth cookies. RLS
+ * enforces the JWT app_metadata role claim; this client only carries the
+ * session. Only call from a request context (cookies() is available).
+ */
+export async function createSessionClient() {
+  const url = requireEnv("NEXT_PUBLIC_SUPABASE_URL");
+  const publishableKey = requireEnv("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY");
+  const cookieStore = await cookies();
+
+  return createServerClient<Database>(url, publishableKey, {
+    cookies: {
+      getAll() {
+        return cookieStore.getAll();
+      },
+      setAll(cookiesToSet) {
+        try {
+          cookiesToSet.forEach(({ name, value, options }) =>
+            cookieStore.set(name, value, options),
+          );
+        } catch {
+          // Called from a Server Component; middleware/proxy refreshes
+          // the session instead. Writes happen in actions and handlers.
+        }
+      },
+    },
+  });
+}
+
+/**
+ * True when the session user carries app_metadata.role = "admin".
+ * Always re check this in every admin action; never trust the client.
+ */
+export function isAdminUser(user: {
+  app_metadata: Record<string, unknown>;
+} | null): boolean {
+  return user?.app_metadata?.role === "admin";
 }
