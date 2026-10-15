@@ -144,13 +144,13 @@ Order of operations, each step short circuits with the state above:
 ## Build plan
 
 1. [x] Spec committed (this file), satisfies nothing on its own
-2. Install `@supabase/ssr`, `zod`, `resend` (justified above), satisfies **AC-9** dependency hygiene
-3. Read Next 16 bundled docs (Server Actions, `useActionState`, forms) and Resend `/llms.txt`, then write `lib/validation/lead.ts` + Vitest tests, satisfies **AC-2**
-4. `lib/supabase/server.ts` anon and service factories, satisfies **AC-3** prerequisite
-5. `lib/email/resend.ts` + `templates.ts`, satisfies **AC-5** template half
-6. `actions/submitLead.ts` implementing the nine steps, satisfies **AC-3**, **AC-4**, **AC-5**, **AC-6**, **AC-7**
-7. Book page server component + client form to the frame, satisfies **AC-1**
-8. Playwright `@ci` suite, `@local` full submit spec, CI job with public env only, satisfies **AC-8**
+2. [x] Install `@supabase/ssr`, `zod`, `resend` (justified above), satisfies **AC-9** dependency hygiene
+3. [x] Read Next 16 bundled docs (Server Actions, `useActionState`, forms) and Resend `/llms.txt`, then write `lib/validation/lead.ts` + Vitest tests, satisfies **AC-2**
+4. [x] `lib/supabase/server.ts` anon and service factories, satisfies **AC-3** prerequisite
+5. [x] `lib/email/resend.ts` + `templates.ts`, satisfies **AC-5** template half
+6. [x] `actions/submitLead.ts` implementing the nine steps, satisfies **AC-3**, **AC-4**, **AC-5**, **AC-6**, **AC-7**
+7. [x] Book page server component + client form to the frame, satisfies **AC-1**
+8. [x] Playwright `@ci` suite, `@local` full submit spec, CI job with public env only, satisfies **AC-8**
 9. Gate: lint, typecheck, unit, build, local full submit (human confirms owner email), advisors, tick ACs, report, satisfies **AC-8**, **AC-9**
 
 ## Consequences
