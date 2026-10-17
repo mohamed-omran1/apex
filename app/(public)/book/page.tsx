@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import { BookingForm } from "@/components/book/booking-form";
 import { getActiveZips } from "@/lib/lead/areas";
+import { publicMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = publicMetadata({
   title: "Book a visit",
   description:
     "Send Apex the short form: name, phone, ZIP, and what the system is doing. The owner calls you back, usually the same day. Around the clock.",
-};
+  path: "/book",
+});
 
 export default async function BookPage() {
   const activeZips = await getActiveZips();

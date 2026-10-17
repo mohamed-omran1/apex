@@ -1,5 +1,7 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { JsonLd } from "@/components/seo/json-ld";
 import { ClosingCta } from "@/components/site/closing-cta";
 import { FaqSection } from "@/components/site/faq-section";
 import { ButtonLink } from "@/components/ui/button";
@@ -8,10 +10,20 @@ import { Stars } from "@/components/ui/stars";
 import { home } from "@/lib/content/home";
 import { services } from "@/lib/content/services";
 import { site } from "@/lib/content/site";
+import { faqPageJsonLd } from "@/lib/seo/json-ld";
+import { publicMetadata } from "@/lib/seo/metadata";
+
+export const metadata: Metadata = publicMetadata({
+  title: "Dallas HVAC repair, replacement and tune-ups",
+  description:
+    "A one-crew Dallas HVAC shop for emergency repair, replacement and seasonal tune-ups. Book in under a minute; the request lands with the owner.",
+  path: "/",
+});
 
 export default function HomePage() {
   return (
     <>
+      <JsonLd data={faqPageJsonLd(home.faq.items)} />
       <section className="bg-sand px-5 pt-5 pb-3 lg:px-20 lg:py-14">
         <div className="mx-auto flex max-w-[1440px] flex-col gap-2 lg:flex-row lg:items-center lg:gap-8 lg:min-[1400px]:gap-12">
           <div className="flex max-w-[620px] flex-col gap-4 lg:flex-1 lg:min-w-0 lg:gap-[18px]">
@@ -224,9 +236,10 @@ export default function HomePage() {
           </p>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {home.areas.map((area) => (
-              <div
-                key={area.name}
-                className="flex flex-col gap-2 rounded-card border border-line bg-paper p-[18px]"
+              <Link
+                key={area.slug}
+                href={`/service-areas/${area.slug}`}
+                className="flex flex-col gap-2 rounded-card border border-line bg-paper p-[18px] transition-colors hover:border-cedar"
               >
                 <h3 className="font-display text-[26px] leading-[30px] font-semibold text-ink">
                   {area.name}
@@ -234,7 +247,7 @@ export default function HomePage() {
                 <p className="text-[14px] leading-[20px] text-soft">
                   {area.body}
                 </p>
-              </div>
+              </Link>
             ))}
           </div>
           <div

@@ -1,3 +1,5 @@
+import { areaCities, areaSlugs } from "@/lib/content/areas";
+
 export const site = {
   name: "Apex Climate Solutions",
   wordmark: "Apex",
@@ -15,7 +17,8 @@ export const site = {
   },
   nav: [
     { label: "Services", href: "/services" },
-    { label: "Areas", href: "/#areas" },
+    { label: "Areas", href: "/service-areas" },
+    { label: "Tips", href: "/tips" },
     { label: "Membership", href: "/#membership" },
     { label: "Reviews", href: "/#reviews" },
   ],
@@ -30,10 +33,18 @@ export const site = {
       "Tune-ups",
       "Indoor air",
     ],
-    areas: ["Dallas", "Plano", "Irving", "Garland", "Richardson", "Frisco"],
+    areas: areaSlugs.map((slug) => ({
+      label: areaCities[slug],
+      href: `/service-areas/${slug}`,
+    })),
     hours: ["Mon–Sat 7a–7p", "Emergency line 24/7", "Book online anytime"],
     legal:
       "TDLR TACLB000000C — placeholder, not a real license. Regulated by the Texas Department of Licensing and Regulation, P.O. Box 12157, Austin, Texas 78711, 1-800-803-9202.",
-    links: "Privacy   ·   Terms   ·   SMS and email consent",
+    links: [
+      { label: "Privacy", href: "/privacy" },
+      { label: "Terms", href: "/terms" },
+      { label: "SMS and email consent", href: "/consent" },
+      { label: "Tips", href: "/tips" },
+    ],
   },
 } as const;

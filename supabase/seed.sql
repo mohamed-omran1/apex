@@ -21,18 +21,63 @@ on conflict (slug) do update set
   is_emergency = excluded.is_emergency,
   sort_order = excluded.sort_order;
 
-insert into public.service_areas (id, slug, city, zip_codes, is_active, sort_order) values
-  ('00000000-0000-0000-0000-000000000201', 'dallas',     'Dallas',     array['75201','75202','75203','75204','75205','75206','75207','75208','75209','75210','75211','75212','75214','75215','75216','75217','75218','75219','75220','75221','75222','75223','75224','75225','75226','75227','75228','75229','75230','75231','75232','75233','75234','75235','75236','75237','75238','75240','75241','75243','75244','75246','75247','75248','75251','75252','75253','75254','75287'], true, 1),
-  ('00000000-0000-0000-0000-000000000202', 'plano',      'Plano',      array['75023','75024','75025','75026','75074','75075','75093','75094'], true, 2),
-  ('00000000-0000-0000-0000-000000000203', 'irving',     'Irving',     array['75038','75039','75060','75061','75062','75063'], true, 3),
-  ('00000000-0000-0000-0000-000000000204', 'garland',    'Garland',    array['75040','75041','75042','75043','75044'], true, 4),
-  ('00000000-0000-0000-0000-000000000205', 'richardson', 'Richardson', array['75080','75081','75082','75083','75085'], true, 5),
-  ('00000000-0000-0000-0000-000000000206', 'frisco',     'Frisco',     array['75034','75035','75036','75037','75068'], true, 6)
+-- Phase 5 content columns live alongside the ZIP data. The six slugs here
+-- must stay in sync with areaSlugs in lib/content/areas.ts (the build time
+-- fallback list). See docs/specs/phase-5.md AC-1.
+insert into public.service_areas (id, slug, city, zip_codes, is_active, sort_order, lede, meta_description, neighborhoods, local_issues, price_range, faqs) values
+  ('00000000-0000-0000-0000-000000000201', 'dallas',     'Dallas',     array['75201','75202','75203','75204','75205','75206','75207','75208','75209','75210','75211','75212','75214','75215','75216','75217','75218','75219','75220','75221','75222','75223','75224','75225','75226','75227','75228','75229','75230','75231','75232','75233','75234','75235','75236','75237','75238','75240','75241','75243','75244','75246','75247','75248','75251','75252','75253','75254','75287'], true, 1,
+    'Lakewood, Oak Cliff, Preston Hollow, East Dallas. The office is here on Demo Street, so most Dallas calls get the shortest drive and the first open window.',
+    'HVAC repair, tune-ups and replacement across Dallas, from Lakewood to Preston Hollow. Serving from our Dallas office, with a written price before any work.',
+    array['Lakewood','Oak Cliff','Preston Hollow','East Dallas','Bachman Lake'],
+    array['1940s and 50s pier and beam houses where the ductwork was added later and never quite sealed','Big trees at the lot line dropping debris into outdoor units every fall','Original R22 systems that are due for a plan, not another recharge'],
+    'Diagnostic $89, waived with the repair. Most Dallas repairs land between $180 and $650. A replacement estimate is free, in the house, with financing explained and no lease.',
+    '[{"q": "Do you have a shop in Dallas?", "a": "Yes. One office, on Demo Street. It is a real address you can call from, and the trucks leave from here."}, {"q": "How soon can you get to East Dallas?", "a": "Same-day windows most days. An emergency jumps the list, including after hours."}, {"q": "Do you work on older Dallas houses?", "a": "That is most of what we see. Pier and beam, later ductwork, and systems that need a plan instead of another recharge."}]'::jsonb),
+  ('00000000-0000-0000-0000-000000000202', 'plano',      'Plano',      array['75023','75024','75025','75026','75074','75075','75093','75094'], true, 2,
+    'West Plano, Legacy, and the Parker Road corridor. We do not list a Plano address. Texas rules do not let a non-office location be used to sell the work, so this page says serving.',
+    'Serving Plano: West Plano, Legacy and Parker Road. AC repair, tune-ups and replacement with a written price first. No Plano office; the truck comes from Dallas.',
+    array['West Plano','Legacy','Parker Road','Whiffletree','Los Rios'],
+    array['Two-story houses from the 90s where the upstairs never quite cools','Original furnaces that are due for the fall checkup','Spring tune-ups book out in March, before the first 90 degree week'],
+    'Diagnostic $89, waived with the repair. Plano repairs usually sit between $190 and $680. A replacement estimate is free, in the house, with financing explained and no lease.',
+    '[{"q": "Do you have a shop in Plano?", "a": "No. One office, on Demo Street in Dallas. The truck comes to Plano from there."}, {"q": "How soon can you get to West Plano?", "a": "Same-day windows most days. An emergency jumps the list, including after hours."}]'::jsonb),
+  ('00000000-0000-0000-0000-000000000203', 'irving',     'Irving',     array['75038','75039','75060','75061','75062','75063'], true, 3,
+    'Las Colinas, Valley Ranch, and the 90s systems built out along Highway 114. Same crew, same written price, truck out of Dallas.',
+    'Serving Irving and Las Colinas: AC and furnace repair, tune-ups and replacement. Written price first. The truck comes from our Dallas office.',
+    array['Las Colinas','Valley Ranch','Heritage District','Promenade Village'],
+    array['Mid-efficiency furnaces from the Valley Ranch boom now at the end of their service life','Tight attics in Las Colinas townhomes make some repairs a half day of access work','Hard water scale shows up on tankless calls here more than up in Frisco'],
+    'Diagnostic $89, waived with the repair. Most Irving repairs land between $175 and $620, and the estimate for a full system is free in the house.',
+    '[{"q": "Do you cover all of Irving?", "a": "The 75038 through 75063 ZIPs, which is most of Irving. If your ZIP is on the booking form list, we drive there."}, {"q": "Can you fix a Valley Ranch townhouse system?", "a": "Yes. Attics are tight, so some jobs take longer. You hear about that in the price before the work starts."}]'::jsonb),
+  ('00000000-0000-0000-0000-000000000204', 'garland',    'Garland',    array['75040','75041','75042','75043','75044'], true, 4,
+    'Firewheel, the Lake Highlands edge, and central Garland houses still running their first furnace. We say serving, because the office is in Dallas.',
+    'Serving Garland, Firewheel and central Garland: furnace and AC repair, tune-ups and replacement. Honest ranges and a written price before any work.',
+    array['Firewheel','Duck Creek','Oakridge','Southern Garland'],
+    array['Central Garland stock from the 60s and 70s with original furnaces that heat unevenly','Firewheel tract homes from the early 2000s hitting capacitor season at the same time','Mature trees drop seed pods into condenser fins every spring'],
+    'Diagnostic $89, waived with the repair. Garland repairs usually run $170 to $600. Replacement quotes are free and in writing, with no lease program.',
+    '[{"q": "Is the fall furnace checkup available in Garland?", "a": "Yes, 89 dollars through October 31, same as everywhere we serve. It is a real checkup, not a sales visit."}, {"q": "My Garland furnace is from the 70s. Is repair worth it?", "a": "Sometimes. We tell you the repair cost against the remaining life in plain numbers, then you decide."}]'::jsonb),
+  ('00000000-0000-0000-0000-000000000205', 'richardson', 'Richardson', array['75080','75081','75082','75083','75085'], true, 5,
+    'Canyon Creek, the neighborhoods off 75, and the Telecom Corridor. Serving from the Dallas office, with the same day windows the rest of the metro gets.',
+    'Serving Richardson, Canyon Creek and the Telecom Corridor: AC and heating repair, tune-ups and replacement, with a written price first.',
+    array['Canyon Creek','Telecom Corridor','Breckinridge Park','Richardson Heights'],
+    array['1970s ranch houses off 75 with ductwork that was never balanced after a remodel','Heat pump swaps in Canyon Creek that left the backup heat misconfigured','Spring pollen packs outdoor coils on the Breckinridge Park side every April'],
+    'Diagnostic $89, waived with the repair. Richardson repairs cluster between $180 and $640. A system replacement estimate is free, in the house, in writing.',
+    '[{"q": "Do you service heat pumps in Richardson?", "a": "Yes. Canyon Creek has a lot of them. We check the backup heat configuration on every call, because that is usually what fails."}, {"q": "How do I know the price before the work?", "a": "The technician diagnoses first, writes the price, and waits. No signature, no work."}]'::jsonb),
+  ('00000000-0000-0000-0000-000000000206', 'frisco',     'Frisco',     array['75034','75035','75036','75037','75068'], true, 6,
+    'Newer builds around the PGA district and the older pockets off Main. New does not mean tuned, and the fall furnace check is the same 89 dollars here.',
+    'Serving Frisco, PGA district and Main Street: AC repair, tune-ups and replacement for newer builds. Written price before any work.',
+    array['PGA District','Main Street','Frisco Square','Stonebriar'],
+    array['Warranty era systems from the 2010s building boom now coming off manufacturer coverage','Builder grade installs with short return runs that starve airflow on the second floor','New construction dust still circulating through systems less than three years old'],
+    'Diagnostic $89, waived with the repair. Frisco repairs usually land between $200 and $700. Replacement estimates are free, in writing, with financing explained in plain numbers.',
+    '[{"q": "The house is new. Why would I need a checkup?", "a": "Builder installs get a certificate, not a shakedown. A first year checkup finds airflow problems while everything is still under warranty."}, {"q": "Do you handle warranty work?", "a": "We diagnose and document. If the part is under manufacturer warranty, you pay for labor only, and we say that number first."}]'::jsonb)
 on conflict (slug) do update set
   city = excluded.city,
   zip_codes = excluded.zip_codes,
   is_active = excluded.is_active,
-  sort_order = excluded.sort_order;
+  sort_order = excluded.sort_order,
+  lede = excluded.lede,
+  meta_description = excluded.meta_description,
+  neighborhoods = excluded.neighborhoods,
+  local_issues = excluded.local_issues,
+  price_range = excluded.price_range,
+  faqs = excluded.faqs;
 
 insert into public.offers (id, title, body, starts_on, ends_on, is_active) values
   ('00000000-0000-0000-0000-000000000301', 'Fall furnace checkup', 'Fall furnace checkup — $89, with a written price before any work.', '2026-01-01', '2026-12-31', true)

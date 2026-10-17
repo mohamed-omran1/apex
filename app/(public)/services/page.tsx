@@ -1,18 +1,27 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { JsonLd } from "@/components/seo/json-ld";
 import { ServiceHero } from "@/components/site/service-hero";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { services } from "@/lib/content/services";
+import { breadcrumbJsonLd } from "@/lib/seo/json-ld";
+import { publicMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = publicMetadata({
   title: "Services",
   description:
     "Emergency, AC repair, replacement, heating, tune-ups and indoor air. Six service pages, no franchise menu.",
-};
+  path: "/services",
+});
 
 export default function ServicesPage() {
   return (
     <>
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "SERVICES", path: "/services" },
+        ])}
+      />
       <ServiceHero
         crumb="SERVICES"
         h1="Repair, replace, or just keep it running."

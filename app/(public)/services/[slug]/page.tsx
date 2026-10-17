@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
+import { JsonLd } from "@/components/seo/json-ld";
 import { ClosingCta } from "@/components/site/closing-cta";
 import { FaqSection } from "@/components/site/faq-section";
 import { ServiceHero } from "@/components/site/service-hero";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { Chip } from "@/components/ui/chip";
 import { getService, serviceSlugs } from "@/lib/content/services";
+import { breadcrumbJsonLd, faqPageJsonLd } from "@/lib/seo/json-ld";
+import { publicMetadata } from "@/lib/seo/metadata";
 
 export function generateStaticParams() {
   return serviceSlugs.map((slug) => ({ slug }));
@@ -18,7 +21,11 @@ export async function generateMetadata({
   const { slug } = await params;
   const service = getService(slug);
   if (!service) return {};
-  return { title: service.card.title, description: service.lede };
+  return publicMetadata({
+    title: service.card.title,
+    description: service.lede,
+    path: `/services/${service.slug}`,
+  });
 }
 
 export default function ServiceDetailPage({
@@ -42,8 +49,23 @@ async function ServiceDetail({
   const service = getService(slug);
   if (!service) notFound();
 
+  const crumbParts = service.crumb
+    .split("/")
+    .map((part) => part.trim())
+    .filter(Boolean);
+  const crumbs = [
+    { name: crumbParts[0] ?? "SERVICES", path: "/services" },
+    {
+      name: crumbParts[1] ?? service.card.title,
+      path: `/services/${service.slug}`,
+    },
+  ];
+
   return (
     <>
+      <JsonLd data={breadcrumbJsonLd(crumbs)} />
+      <JsonLd data={faqPageJsonLd(service.faqs)} />
+
       <ServiceHero
         crumb={service.crumb}
         h1={service.h1}

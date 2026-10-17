@@ -110,26 +110,32 @@ export const home = {
   },
   areas: [
     {
+      slug: "dallas",
       name: "Dallas",
       body: "The office. Lakewood, Oak Cliff, Preston Hollow, East Dallas.",
     },
     {
+      slug: "plano",
       name: "Plano",
       body: "West Plano and Legacy. Spring tune-ups book out early.",
     },
     {
+      slug: "irving",
       name: "Irving",
       body: "Las Colinas and Valley Ranch, mostly 90s systems.",
     },
     {
+      slug: "garland",
       name: "Garland",
       body: "Firewheel and central houses with original furnaces.",
     },
     {
+      slug: "richardson",
       name: "Richardson",
       body: "Canyon Creek and the neighborhoods off 75.",
     },
     {
+      slug: "frisco",
       name: "Frisco",
       body: "Newer builds that still need a fall furnace check.",
     },

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Fraunces, Instrument_Sans } from "next/font/google";
+import { isIndexingEnabled } from "@/lib/seo/url";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -11,7 +12,7 @@ const fraunces = Fraunces({
 
 const instrumentSans = Instrument_Sans({
   subsets: ["latin"],
-  style: ["normal", "italic"],
+  style: ["normal"],
   variable: "--font-instrument",
   display: "swap",
 });
@@ -24,7 +25,9 @@ export const metadata: Metadata = {
   },
   description:
     "A one-crew Dallas HVAC shop for emergency repair, replacement and seasonal tune-ups. Book in under a minute; the request lands with the owner.",
-  robots: { index: false, follow: false },
+  robots: isIndexingEnabled()
+    ? { index: true, follow: true }
+    : { index: false, follow: false },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

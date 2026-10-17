@@ -1,8 +1,13 @@
+import Link from "next/link";
 import { site } from "@/lib/content/site";
 
-const columns = [
+type FooterColumn =
+  | { head: string; links: readonly { label: string; href: string }[] }
+  | { head: string; items: readonly string[] };
+
+const columns: FooterColumn[] = [
   { head: "Services", items: site.footer.services },
-  { head: "Areas", items: site.footer.areas },
+  { head: "Areas", links: site.footer.areas },
   { head: "Hours", items: site.footer.hours },
 ];
 
@@ -30,11 +35,25 @@ export function SiteFooter() {
             <div key={col.head} className="flex flex-col gap-2.5">
               <p className="text-[14px] font-semibold text-chalk">{col.head}</p>
               <ul className="flex flex-col gap-2">
-                {col.items.map((item) => (
-                  <li key={item} className="text-[13px] leading-[18px] text-dust">
-                    {item}
-                  </li>
-                ))}
+                {"links" in col
+                  ? col.links.map((link) => (
+                      <li key={link.href}>
+                        <Link
+                          href={link.href}
+                          className="text-[13px] leading-[18px] text-dust hover:text-paper"
+                        >
+                          {link.label}
+                        </Link>
+                      </li>
+                    ))
+                  : col.items.map((item) => (
+                      <li
+                        key={item}
+                        className="text-[13px] leading-[18px] text-dust"
+                      >
+                        {item}
+                      </li>
+                    ))}
               </ul>
             </div>
           ))}
@@ -43,7 +62,20 @@ export function SiteFooter() {
           <p className="max-w-[1200px] text-[13px] leading-[18px] text-dust">
             {site.footer.legal}
           </p>
-          <p className="mt-3 text-[13px] text-chalk">{site.footer.links}</p>
+          <nav
+            aria-label="Legal"
+            className="mt-3 flex flex-wrap gap-x-5 gap-y-2"
+          >
+            {site.footer.links.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-[13px] leading-[18px] font-medium text-chalk hover:text-paper"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
         </div>
       </div>
     </footer>

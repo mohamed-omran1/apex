@@ -127,4 +127,12 @@ test.describe("@ci booking form (no database writes)", () => {
       page.getByRole("button", { name: "Request the estimate" }),
     ).toBeVisible();
   });
+
+  test("@ci ?kind= is an alias for ?type=", async ({ page }) => {
+    await page.goto("/book?kind=tune_up");
+
+    await expect(
+      page.locator('input[name="kind"][value="tune_up"]'),
+    ).toBeChecked();
+  });
 });

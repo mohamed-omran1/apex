@@ -237,8 +237,14 @@ export type Database = {
         Row: {
           city: string
           created_at: string
+          faqs: Json
           id: string
           is_active: boolean
+          lede: string
+          local_issues: string[]
+          meta_description: string
+          neighborhoods: string[]
+          price_range: string
           slug: string
           sort_order: number
           zip_codes: string[]
@@ -246,8 +252,14 @@ export type Database = {
         Insert: {
           city: string
           created_at?: string
+          faqs?: Json
           id?: string
           is_active?: boolean
+          lede?: string
+          local_issues?: string[]
+          meta_description?: string
+          neighborhoods?: string[]
+          price_range?: string
           slug: string
           sort_order?: number
           zip_codes: string[]
@@ -255,8 +267,14 @@ export type Database = {
         Update: {
           city?: string
           created_at?: string
+          faqs?: Json
           id?: string
           is_active?: boolean
+          lede?: string
+          local_issues?: string[]
+          meta_description?: string
+          neighborhoods?: string[]
+          price_range?: string
           slug?: string
           sort_order?: number
           zip_codes?: string[]
