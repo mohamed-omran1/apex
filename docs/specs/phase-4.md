@@ -156,17 +156,17 @@ No new repo environment variables (`SITE_URL`, the Supabase keys and the Resend 
 
 ## Build plan
 
-1. [ ] Spec committed (this file), satisfies nothing on its own
+1. [x] Spec committed (this file), satisfies nothing on its own
 2. [ ] Read Next 16 bundled docs (proxy, Server Actions, forms, route handlers) and `@supabase/ssr` `llms.txt`; then write the migration with `npx supabase migration new phase4_admin_auth`: drop and recreate every admin policy on the claim, keep anon policies and the own row `admin_users` policy; update `supabase/tests/rls_policies.sql` to grant the simulated admin the JWT claim; report the human push commands and run advisors plus pgTAP, satisfies **AC-9**
-3. [ ] `scripts/create-admin.ts` (service role, confirmed user, `app_metadata.role`, `admin_users` upsert, idempotent); document the run command for the human and confirm one admin exists, satisfies **AC-10**
-4. [ ] Session layer: extend `lib/supabase/server.ts` with a session client factory; root `proxy.ts` (Next 16 convention) refreshing the session and redirecting unauthenticated `/admin` requests to sign in; `lib/validation/auth.ts` and `settings.ts` Zod schemas; in memory OTP rate limiter, satisfies **AC-1**, **AC-4** prerequisite
-5. [ ] Auth actions `requestOtp`, `verifyOtp` (role check then immediate sign out on failure), `signOut` with `useActionState` wiring, satisfies **AC-2**, **AC-3**, **AC-11**
-6. [ ] `/admin/sign-in` page from Phase 1 tokens (centered card, no Figma frame exists), satisfies **AC-1**
-7. [ ] `/admin` shell: sidebar from the cached frame (nav, emergency panel, who block with sign out), `noindex` metadata helper for all admin routes, satisfies **AC-4**, **AC-7** shell half
-8. [ ] `/admin/inbox`: server component reading leads through the session client with filters, search and pagination; `updateLeadStatus` and `addNote` actions with the transition allow list; empty states, satisfies **AC-5**, **AC-6** action half
-9. [ ] `/admin/leads/[id]`: facts card, timeline, note box, action buttons (including a Lost button the frame omits), satisfies **AC-6**
-10. [ ] `/admin/settings`: three cards, `updateSettings` and `updateOffer` actions, sidebar toggle parity, satisfies **AC-7**
-11. [ ] `GET /admin/export` CSV route with filter parity and escaping, satisfies **AC-8**
+3. [x] `scripts/create-admin.ts` (service role, confirmed user, `app_metadata.role`, `admin_users` upsert, idempotent); document the run command for the human and confirm one admin exists, satisfies **AC-10**
+4. [x] Session layer: extend `lib/supabase/server.ts` with a session client factory; root `proxy.ts` (Next 16 convention) refreshing the session and redirecting unauthenticated `/admin` requests to sign in; `lib/validation/auth.ts` and `settings.ts` Zod schemas; in memory OTP rate limiter, satisfies **AC-1**, **AC-4** prerequisite
+5. [x] Auth actions `requestOtp`, `verifyOtp` (role check then immediate sign out on failure), `signOut` with `useActionState` wiring, satisfies **AC-2**, **AC-3**, **AC-11**
+6. [x] `/admin/sign-in` page from Phase 1 tokens (centered card, no Figma frame exists), satisfies **AC-1**
+7. [x] `/admin` shell: sidebar from the cached frame (nav, emergency panel, who block with sign out), `noindex` metadata helper for all admin routes, satisfies **AC-4**, **AC-7** shell half
+8. [x] `/admin/inbox`: server component reading leads through the session client with filters, search and pagination; `updateLeadStatus` and `addNote` actions with the transition allow list; empty states, satisfies **AC-5**, **AC-6** action half
+9. [x] `/admin/leads/[id]`: facts card, timeline, note box, action buttons (including a Lost button the frame omits), satisfies **AC-6**
+10. [x] `/admin/settings`: three cards, `updateSettings` and `updateOffer` actions, sidebar toggle parity, satisfies **AC-7**
+11. [x] `GET /admin/export` CSV route with filter parity and escaping, satisfies **AC-8**
 12. [ ] Playwright `@ci` suites (sign in render, rate limit UI, unauthenticated redirect); local full loop (script, OTP email, inbox, status move, settings, CSV); gate lint, typecheck, test, build; human confirms SMTP config and first OTP email; tick ACs and report, satisfies **AC-11**, **AC-12**
 
 ## Consequences
@@ -190,7 +190,7 @@ No new repo environment variables (`SITE_URL`, the Supabase keys and the Resend 
 
 ## Follow-up
 
-- [ ] Edit `docs/PLAN.md`: the trust table row "TOTP multi-factor on admin accounts" and the Phase 4 gate "Auth with MFA" now read "email OTP (single factor); TOTP deferred". This spec is the record of that deviation.
+- [x] Edit `docs/PLAN.md`: the trust table row "TOTP multi-factor on admin accounts" and the Phase 4 gate "Auth with MFA" now read "email OTP (single factor); TOTP deferred". This spec is the record of that deviation.
 - [ ] TOTP as a second factor (Supabase MFA enroll and verify screens, recovery codes) when the demo graduates to a real client deployment.
 - [ ] Platform level rate limit on the OTP request action (Vercel WAF), joining the Phase 3 booking follow up.
 - [ ] Decide whether to drop `admin_users` entirely in a later migration once the claim based policies have shipped for a while.

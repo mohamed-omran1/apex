@@ -190,7 +190,7 @@ The compliance details are what separate a real contractor site from a template,
 | Regulator notice | Proposals, invoices and contracts must carry the TDLR "Regulated by" notice. Put it in the footer now and in future estimate templates | Footer component |
 | Consent | Store a consent flag, a timestamp and the wording version with each lead. SMS stays off in the MVP, but the checkbox and the columns exist | `leads` consent columns |
 | Spam | Honeypot field, Cloudflare Turnstile, server-side Zod validation, and a platform-level rate limit on the booking endpoint | Server Action, edge rules |
-| Admin access | Supabase Auth with the `admin_users` allowlist, TOTP multi-factor on admin accounts, no public sign-up | `/admin` middleware and RLS |
+| Admin access | Supabase Auth with the `admin_users` allowlist, email OTP (single factor); TOTP deferred, no public sign-up | `/admin` middleware and RLS |
 | Secrets | Resend and service keys server-only, `.env.example` committed, real `.env.local` never | Repo and hosting settings |
 | Accessibility | Labeled form fields, visible focus, color contrast at WCAG 2 AA, checked with axe in CI | Components and tests |
 | Privacy | Ask for the minimum: name, phone, zip, and the full address only when a visit is booked. Privacy page explains retention | Booking form, `/privacy` |
@@ -239,7 +239,7 @@ Data and security come before the booking flow on purpose: RLS is easiest to get
 | 1 | Design system and static pages | Tokens, components, home and service pages | Mobile Lighthouse 90+ on home — passed 2026-10-14, score 92 |
 | 2 | Data and security | Schema, enums, RLS policies, seed data | Advisors clean and RLS tests pass |
 | 3 | Booking flow | Form, Server Action, Resend emails, spam checks | E2E passes and the owner email arrives |
-| 4 | Admin dashboard | Auth with MFA, inbox, lead detail, settings, CSV | Lead moves new to scheduled; non-admin blocked |
+| 4 | Admin dashboard | Auth with email OTP (single factor); TOTP deferred, inbox, lead detail, settings, CSV | Lead moves new to scheduled; non-admin blocked |
 | 5 | Local SEO and content | Area pages, JSON-LD, sitemap, three articles | Rich Results Test passes; sitemap complete |
 | 6 | Polish, deploy and case study | Accessibility, perf, staging then production, demo clip | Pre-launch checklist ticked |
 
