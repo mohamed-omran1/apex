@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import type { AdminFormState } from "@/lib/admin/transitions";
 import { updateOffer, updateSettings } from "@/actions/admin";
 import { buttonClass } from "@/components/ui/button";
@@ -32,6 +33,7 @@ export function SettingsForms({
   settings: SettingsValues;
   offer: OfferValues;
 }) {
+  const router = useRouter();
   const [pending, setPending] = useState(false);
   const [settingsState, setSettingsState] = useState<AdminFormState | null>(null);
   const [offerState, setOfferState] = useState<AdminFormState | null>(null);
@@ -45,6 +47,23 @@ export function SettingsForms({
     const form = event.currentTarget;
     const fd = new FormData(form);
 
+    // An unchecked checkbox is omitted from FormData entirely. Make the
+    // key explicit so the partial patch can write false, not skip it.
+    if (!fd.has("emergency_mode")) {
+      fd.set("emergency_mode", "false");
+    }
+
+    // The action patches business_hours as one JSON object; assemble it
+    // from the three per line inputs before handing the FormData over.
+    fd.set(
+      "business_hours",
+      JSON.stringify({
+        mon_sat: String(fd.get("hours_mon_sat") ?? ""),
+        emergency: String(fd.get("hours_emergency") ?? ""),
+        online: String(fd.get("hours_online") ?? ""),
+      }),
+    );
+
     // One FormData, two actions. updateSettings only reads the keys it
     // knows; updateOffer only reads its own. Sequential so a slow offer
     // save never races the settings write.
@@ -56,6 +75,12 @@ export function SettingsForms({
 
     const offerResult = await updateOffer({ ok: false, code: "invalid" }, fd);
     setOfferState(offerResult);
+
+    // Re-render the admin tree so the sidebar emergency indicator picks
+    // up the row the action just wrote (and revalidated).
+    if (settingsResult.ok || offerResult.ok) {
+      router.refresh();
+    }
 
     setPending(false);
   }

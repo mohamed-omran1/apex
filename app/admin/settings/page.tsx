@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { connection } from "next/server";
 import { SettingsForms } from "@/components/admin/settings-forms";
 import { createSessionClient } from "@/lib/supabase/server";
 
@@ -13,6 +14,7 @@ const defaultHours = { mon_sat: "7a-7p", emergency: "24/7", online: "anytime" };
 type HoursShape = { mon_sat?: string; emergency?: string; online?: string };
 
 export default async function SettingsPage() {
+  await connection();
   const supabase = await createSessionClient();
 
   const { data: settingsRow } = await supabase

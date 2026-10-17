@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { refresh, revalidatePath } from "next/cache";
 import { createSessionClient, isAdminUser } from "@/lib/supabase/server";
 import { offerSchema, settingsPatchSchema } from "@/lib/validation/settings";
 import {
@@ -96,6 +97,15 @@ export async function updateLeadStatus(
     console.error("[admin] event insert failed:", eventError.message);
   }
 
+  // Inbox is the list this action is usually fired from; also revalidate the
+  // lead detail route so the pill there matches. refresh() forces a client
+  // router refetch of whatever page submitted the form — the list pill and
+  // the detail header both come from the server, so without this the UI
+  // stays stale until a manual reload (Next 16.4 + cacheComponents).
+  revalidatePath("/admin/inbox");
+  revalidatePath(`/admin/leads/${leadId}`);
+  refresh();
+
   return { ok: true, code: "saved", message: `Marked ${nextStatus}.` };
 }
 
@@ -182,6 +192,9 @@ export async function updateSettings(
     console.error("[admin] settings update failed:", error.message);
     return { ok: false, code: "server_error", message: "Could not save the settings." };
   }
+  // The sidebar emergency indicator lives in the admin layout; purge it
+  // so the next render reads the row we just wrote.
+  revalidatePath("/admin", "layout");
   return { ok: true, code: "saved", message: "Settings saved." };
 }
 

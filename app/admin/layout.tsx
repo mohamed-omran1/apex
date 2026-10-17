@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
 import { headers } from "next/headers";
+import { connection } from "next/server";
 import { AdminSidebarClient } from "@/components/admin/admin-sidebar-client";
 import { createSessionClient, isAdminUser } from "@/lib/supabase/server";
 
@@ -19,6 +20,7 @@ export default async function AdminLayout({
 }: {
   children: ReactNode;
 }) {
+  await connection();
   const supabase = await createSessionClient();
   const {
     data: { user },

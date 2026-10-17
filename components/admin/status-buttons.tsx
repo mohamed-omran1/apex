@@ -1,6 +1,7 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import {
   leadTransitions,
   type AdminFormState,
@@ -37,6 +38,20 @@ export function StatusButtons({
     updateLeadStatus,
     initialState,
   );
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+
+  // The action revalidates this lead and calls refresh(). This extra
+  // router.refresh() covers a dropped RSC payload so the header pill
+  // and button set update without a manual reload.
+  useEffect(() => {
+    if (state.ok) {
+      startTransition(() => {
+        router.refresh();
+      });
+    }
+  }, [state, router]);
+
   const allowed = leadTransitions[status as LeadStatus] ?? [];
 
   if (allowed.length === 0) {
@@ -57,7 +72,7 @@ export function StatusButtons({
             type="submit"
             name="status"
             value={next}
-            disabled={pending}
+            disabled={pending || isPending}
             className={`rounded-full px-4 py-2 text-[13px] font-medium disabled:opacity-50 ${
               style[next] ?? "border border-line bg-paper text-soft"
             }`}

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { connection } from "next/server";
 import { KindPill, StatusPill, statusLabels } from "@/components/admin/pills";
 import { buttonClass } from "@/components/ui/button";
 import { createSessionClient } from "@/lib/supabase/server";
@@ -71,6 +72,7 @@ export default async function InboxPage({
     page?: string;
   }>;
 }) {
+  await connection();
   const params = await searchParams;
   const status = params.status ?? "";
   const kind = params.kind ?? "";
@@ -215,7 +217,7 @@ export default async function InboxPage({
               key={lead.id}
               className="rounded-[16px] border border-line bg-paper px-4 py-3.5"
             >
-              <div className="flex flex-wrap items-start justify-between gap-3">
+              <div className="flex flex-col justify-between gap-3 min-lg:flex-row min-lg:flex-wrap min-lg:items-start">
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
                     <Link

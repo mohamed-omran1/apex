@@ -1,6 +1,7 @@
 "use client";
 
-import { useActionState } from "react";
+import { useEffect, useActionState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import {
   leadTransitions,
   type AdminFormState,
@@ -37,26 +38,50 @@ export function LeadRowActions({
     updateLeadStatus,
     initialState,
   );
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+
+  // The action revalidates /admin/inbox and /admin/leads/[id] and calls
+  // refresh() so the RSC payload carries the new status. This extra
+  // router.refresh() covers the case where that payload is dropped.
+  useEffect(() => {
+    if (state.ok) {
+      startTransition(() => {
+        router.refresh();
+      });
+    }
+  }, [state, router]);
+
+  // Always derive buttons from the server status prop. Optimistically
+  // swapping the button set removes the submit button before the form
+  // action fires, so the POST never goes out.
   const allowed = leadTransitions[status as LeadStatus] ?? [];
 
   return (
     <div className="flex flex-col items-end gap-1.5">
-      <form action={formAction} className="flex flex-wrap justify-end gap-1.5">
+      <form
+        action={formAction}
+        className="grid w-full grid-cols-2 gap-1.5 max-[359px]:grid-cols-1 min-lg:flex min-lg:flex-wrap min-lg:justify-end"
+      >
         <input type="hidden" name="lead_id" value={leadId} />
-        {allowed.map((next) => (
+        {allowed.map((next, i) => (
           <button
             key={next}
             type="submit"
             name="status"
             value={next}
-            disabled={pending}
-            className={`rounded-full px-3 py-1.5 text-[12px] font-medium disabled:opacity-50 ${style[next] ?? "border border-line bg-paper text-soft"}`}
+            disabled={pending || isPending}
+            className={`rounded-full px-3 py-1.5 text-[12px] font-medium disabled:opacity-50 ${
+              i === allowed.length - 1 && allowed.length % 2 === 1
+                ? "col-span-full"
+                : ""
+            } ${style[next] ?? "border border-line bg-paper text-soft"}`}
           >
             {label[next] ?? next}
           </button>
         ))}
         {allowed.length === 0 ? (
-          <span className="rounded-full border border-line bg-sand px-3 py-1.5 text-[12px] text-mute">
+          <span className="col-span-full justify-self-end rounded-full border border-line bg-sand px-3 py-1.5 text-[12px] text-mute">
             No moves
           </span>
         ) : null}

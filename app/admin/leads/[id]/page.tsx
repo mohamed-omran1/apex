@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { connection } from "next/server";
 import { kindLabels, StatusPill } from "@/components/admin/pills";
 import { NoteForm } from "@/components/admin/note-form";
 import { StatusButtons } from "@/components/admin/status-buttons";
@@ -60,6 +61,7 @@ export default async function LeadDetailPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  await connection();
   const { id } = await params;
   const supabase = await createSessionClient();
 
