@@ -3,6 +3,7 @@ import Link from "next/link";
 import { connection } from "next/server";
 import { KindPill, StatusPill, statusLabels } from "@/components/admin/pills";
 import { buttonClass } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
 import { createSessionClient } from "@/lib/supabase/server";
 import {
   leadTransitions,
@@ -202,14 +203,14 @@ export default async function InboxPage({
 
       {/* Lead cards */}
       {pageLeads.length === 0 ? (
-        <div className="rounded-[16px] border border-line bg-paper px-6 py-14 text-center">
-          <p className="font-display text-[22px] text-ink">Nothing here yet.</p>
-          <p className="mt-2 text-[14px] text-soft">
-            {q || status || kind
+        <EmptyState
+          title="Nothing here yet."
+          body={
+            q || status || kind
               ? "No leads match these filters. Clear a filter and try again."
-              : "New requests land here the moment somebody books."}
-          </p>
-        </div>
+              : "New requests land here the moment somebody books."
+          }
+        />
       ) : (
         <ul className="flex flex-col gap-2">
           {pageLeads.map((lead) => (

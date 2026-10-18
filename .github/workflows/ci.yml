@@ -59,3 +59,36 @@ jobs:
 
       - name: E2E (form only, no database writes)
         run: npx playwright test --grep "@ci"
+
+  performance:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Start app
+        run: npm run start &
+        # Wait for the server to accept connections before Lighthouse runs.
+      - name: Wait for server
+        run: npx --yes wait-on http://127.0.0.1:3000 --timeout 120000
+
+      - name: Lighthouse performance (home)
+        run: npx --yes lighthouse http://127.0.0.1:3000 --only-categories=performance --form-factor=mobile --screenEmulation.mobile --chrome-flags="--headless=new" --quiet --output=json --output-path=./lighthouse-home.json && node -e "const r=require('./lighthouse-home.json'); const s=Math.round(r.categories.performance.score*100); console.log('performance home:', s);"
+
+      - name: Lighthouse performance (service area)
+        run: npx --yes lighthouse http://127.0.0.1:3000/service-areas/dallas --only-categories=performance --form-factor=mobile --screenEmulation.mobile --chrome-flags="--headless=new" --quiet --output=json --output-path=./lighthouse-area.json && node -e "const r=require('./lighthouse-area.json'); const s=Math.round(r.categories.performance.score*100); console.log('performance /service-areas/dallas:', s);"
+

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/seo/json-ld";
 import { ClosingCta } from "@/components/site/closing-cta";
@@ -28,23 +27,9 @@ export async function generateMetadata({
   });
 }
 
-export default function ServiceDetailPage({
+export default async function ServiceDetailPage({
   params,
 }: PageProps<"/services/[slug]">) {
-  return (
-    <Suspense
-      fallback={<div className="min-h-[480px] bg-sand" aria-hidden="true" />}
-    >
-      <ServiceDetail params={params} />
-    </Suspense>
-  );
-}
-
-async function ServiceDetail({
-  params,
-}: {
-  params: PageProps<"/services/[slug]">["params"];
-}) {
   const { slug } = await params;
   const service = getService(slug);
   if (!service) notFound();

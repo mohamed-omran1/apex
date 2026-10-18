@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/seo/json-ld";
 import { ClosingCta } from "@/components/site/closing-cta";
@@ -52,23 +51,9 @@ export async function generateMetadata({
   );
 }
 
-export default function AreaPage({
+export default async function AreaPage({
   params,
 }: PageProps<"/service-areas/[slug]">) {
-  return (
-    <Suspense
-      fallback={<div className="min-h-[480px] bg-sand" aria-hidden="true" />}
-    >
-      <AreaDetail params={params} />
-    </Suspense>
-  );
-}
-
-async function AreaDetail({
-  params,
-}: {
-  params: PageProps<"/service-areas/[slug]">["params"];
-}) {
   const { slug } = await params;
   const area = await getAreaBySlug(slug);
   if (!area && !isAreaSlug(slug)) notFound();

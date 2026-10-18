@@ -264,10 +264,10 @@ A contractor demo lives or dies on the booking flow and the admin view, so tests
 - [ ] Tap-to-call and the booking flow tested on a real iPhone and a real Android phone
 - [ ] Owner notification email arrives within seconds and renders well in Gmail
 - [ ] Supabase advisors report no security or performance warnings
-- [ ] No service-role key in the client bundle (search the build output)
-- [ ] 404, 500 and empty states designed
-- [ ] Demo disclaimers, placeholder license and `noindex` in place
-- [ ] Seed data loaded: services, six areas, one offer, sample reviews, 15 to 20 sample leads in different statuses so the admin looks alive
+- [x] No service-role key in the client bundle (search the build output) (build output search on the final production build: no `service_role`, no `sb_secret_`, nothing key shaped in `.next/static`; the publishable key in static chunks is expected)
+- [x] 404, 500 and empty states designed (styled 404 verified with status 404 in the production build; forced error rendered the styled error page in a browser with no visible stack; empty states share one `EmptyState` primitive across reviews, admin inbox, service and area lists, offers)
+- [x] Demo disclaimers, placeholder license and `noindex` in place (live production build: fictional notice, `TACLB000000C`, SAMPLE tags, area pages say serving and answer "office in" questions with "No", `noindex` in root metadata)
+- [x] Seed data loaded: services, six areas, one offer, sample reviews, 15 to 20 sample leads in different statuses so the admin looks alive (`supabase/seed.sql`: 6 services, 6 areas, 1 offer, reviews, exactly 18 leads `APEX-DEMO-001` to `018` across new, contacted, scheduled, completed, lost, spam; applied to the production project per phase 5)
 
 ## Portfolio angle
 

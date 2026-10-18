@@ -10,6 +10,10 @@ export function DemoBar() {
 }
 
 export function OfferBar() {
+  if (!site.offer.desktop && !site.offer.mobile) {
+    return null;
+  }
+
   return (
     <div className="bg-cedar px-4 py-2 lg:px-20 lg:py-2.5">
       <div className="mx-auto flex max-w-[1440px] items-center justify-center gap-4 lg:justify-between">

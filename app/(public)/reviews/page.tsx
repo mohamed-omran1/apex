@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ContentPage } from "@/components/site/content-page";
+import { EmptyState } from "@/components/ui/empty-state";
 import { Stars } from "@/components/ui/stars";
 import { trustPages } from "@/lib/content/trust";
 import { formatReviewDate, getPublishedReviews } from "@/lib/lead/reviews";
@@ -19,12 +20,10 @@ export default async function ReviewsPage() {
   return (
     <ContentPage page={content}>
       {reviews.length === 0 ? (
-        <div className="rounded-card border border-line bg-sand p-[22px]">
-          <p className="text-[15px] leading-[22px] text-soft">
-            No published reviews yet. When the owner publishes one from the
-            admin desk, it shows up right here.
-          </p>
-        </div>
+        <EmptyState
+          title="No reviews yet."
+          body="When the owner publishes one from the admin desk, it shows up right here."
+        />
       ) : (
         <div className="grid gap-4 md:grid-cols-2">
           {reviews.map((review) => (
