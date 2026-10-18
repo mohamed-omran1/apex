@@ -9,6 +9,16 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+# NEXT_PUBLIC_ values are public by design: they ship to every browser in the
+# client bundle, so hard-coding them here exposes nothing a page load does not
+# already expose. GitHub secrets override the defaults when someone configures
+# them, so a staging or forked run can point elsewhere without editing this file.
+# The verify job needs these too: without them the build fails while prerendering
+# /admin/export (requireEnv throws).
+env:
+  NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://qnyfuzxfqghipuntrhhr.supabase.co' }}
+  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || 'sb_publishable_ha0kLPOZKK8-dE83CFYKdw_7qGPHtcl' }}
+
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -37,9 +47,6 @@ jobs:
 
   e2e:
     runs-on: ubuntu-latest
-    env:
-      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
     steps:
       - uses: actions/checkout@v4
 
@@ -63,9 +70,6 @@ jobs:
   performance:
     runs-on: ubuntu-latest
     continue-on-error: true
-    env:
-      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
-      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
     steps:
       - uses: actions/checkout@v4
 
