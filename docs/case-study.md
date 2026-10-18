@@ -60,7 +60,7 @@ per page. Raw JSON lives in `docs/evidence/lighthouse/`.
 | Service area page (`/service-areas/dallas`), mobile Lighthouse performance | **96** (runs: 96, 95, 96, 96, 96) | `dallas-final-1..5.json` |
 | Accessibility score on both pages | 100 | same runs |
 | Layout shift (CLS) on both pages | 0.000 | same runs |
-| axe accessibility suite | 18 tests, 0 failures | `e2e/axe.ci.spec.ts` |
+| axe accessibility suite | 20 tests, 0 failures | `e2e/axe.ci.spec.ts` |
 | Full Playwright `@ci` suite | 52 tests, 0 failures (mobile and desktop) | `e2e/*.spec.ts` |
 | Unit tests | 44 passing | Vitest |
 | Static pages in the production build | 41 | `npm run build` |

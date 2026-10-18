@@ -1,7 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import { site } from "@/lib/content/site";
+import { RecoveryLinks } from "@/components/site/recovery-links";
 import "./globals.css";
 
 export default function GlobalError({
@@ -69,59 +68,7 @@ export default function GlobalError({
         >
           Try again
         </button>
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "12px",
-            justifyContent: "center",
-          }}
-        >
-          <Link
-            href="/"
-            style={{
-              borderRadius: "9999px",
-              padding: "12px 20px",
-              fontSize: "14px",
-              fontWeight: 600,
-              backgroundColor: "var(--color-cedar)",
-              color: "var(--color-paper)",
-              textDecoration: "none",
-            }}
-          >
-            Back home
-          </Link>
-          <a
-            href={site.phoneHref}
-            style={{
-              borderRadius: "9999px",
-              padding: "12px 20px",
-              fontSize: "14px",
-              fontWeight: 600,
-              border: "1.5px solid var(--color-cedar)",
-              color: "var(--color-cedar)",
-              backgroundColor: "var(--color-paper)",
-              textDecoration: "none",
-            }}
-          >
-            Call {site.phoneDisplay}
-          </a>
-          <Link
-            href="/book"
-            style={{
-              borderRadius: "9999px",
-              padding: "12px 20px",
-              fontSize: "14px",
-              fontWeight: 600,
-              border: "1.5px solid var(--color-cedar)",
-              color: "var(--color-cedar)",
-              backgroundColor: "var(--color-paper)",
-              textDecoration: "none",
-            }}
-          >
-            Book service
-          </Link>
-        </div>
+        <RecoveryLinks />
         {error.digest ? (
           <p
             style={{

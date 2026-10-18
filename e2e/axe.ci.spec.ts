@@ -45,8 +45,6 @@ test.describe("@ci axe (wcag2aa, serious and critical)", () => {
     });
   }
 
-  // The existing admin pattern never completes OTP in CI, so the inbox and
-  // lead detail redirect to sign in. Axe runs on that reachable admin surface.
   test("@ci /admin/sign-in has no serious or critical violations", async ({
     page,
   }) => {
@@ -55,11 +53,23 @@ test.describe("@ci axe (wcag2aa, serious and critical)", () => {
     await expectNoSeriousViolations(page, "/admin/sign-in");
   });
 
+  // The existing admin pattern never completes OTP in CI, so the inbox and
+  // lead detail pages redirect to sign in. Axe visits both admin routes and
+  // scans that reachable bounce surface; a signed-in admin scan would need a
+  // CI session helper (recorded as a follow-up in the phase 6 spec).
   test("@ci bounced /admin/inbox (sign-in) has no serious or critical violations", async ({
     page,
   }) => {
     await page.goto("/admin/inbox");
     await expect(page).toHaveURL(/\/admin\/sign-in/);
     await expectNoSeriousViolations(page, "/admin/inbox → sign-in");
+  });
+
+  test("@ci bounced /admin/leads detail (sign-in) has no serious or critical violations", async ({
+    page,
+  }) => {
+    await page.goto("/admin/leads/00000000-0000-0000-0000-000000001001");
+    await expect(page).toHaveURL(/\/admin\/sign-in/);
+    await expectNoSeriousViolations(page, "/admin/leads/<id> → sign-in");
   });
 });

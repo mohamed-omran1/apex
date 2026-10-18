@@ -82,8 +82,9 @@ Run on the live URL after each environment:
 
 ```bash
 # From a production build locally, or inspect the deployed bundle:
-# search build output for the service role key — must find nothing
-rg -i "service_role|service-role" .next || echo "clean"
+# search build output for the service role key — must print clean,
+# exits 1 and lists the files if anything is found
+node scripts/check-build-output.mjs
 ```
 
 - [ ] `npm run build` succeeds in CI for the deploy commit

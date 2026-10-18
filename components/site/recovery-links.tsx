@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { site } from "@/lib/content/site";
 
-export function RecoveryLinks({ retryHref }: { retryHref?: string }) {
+export function RecoveryLinks() {
   return (
     <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
       <Link
@@ -17,7 +17,7 @@ export function RecoveryLinks({ retryHref }: { retryHref?: string }) {
         Call {site.phoneDisplay}
       </a>
       <Link
-        href={retryHref ?? "/book"}
+        href="/book"
         className="rounded-full border-[1.5px] border-cedar bg-paper px-5 py-3 text-[14px] font-semibold text-cedar hover:bg-sage"
       >
         Book service
